@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tmdb_app_dio/config/theme/theme_app.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:tmdb_app_dio/presentation/providers/theme_provider.dart';
 import 'package:tmdb_app_dio/presentation/screens/screens.dart';
+import 'package:tmdb_app_dio/config/theme/theme_app.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: ".env");
   runApp(
     const ProviderScope(
       child: MyApp(),

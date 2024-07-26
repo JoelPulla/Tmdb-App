@@ -11,7 +11,6 @@ class ConfigScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textThemeApp = Theme.of(context).textTheme;
     final themeApp = Theme.of(context).colorScheme;
-    
 
     return Scaffold(
       body: Padding(

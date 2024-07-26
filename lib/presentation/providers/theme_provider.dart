@@ -5,5 +5,5 @@ import 'package:tmdb_app_dio/config/theme/theme_app.dart';
 final isDarkModeProvider = StateProvider((ref) => false);
 
 //theme Colors
-final themeColorprovider = StateProvider((ref) => colorList);
+final themeColorprovider = Provider((ref) => colorList);
 final selectedColorProvider = StateProvider((ref) => 0);
