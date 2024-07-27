@@ -1,4 +1,4 @@
-class MovieModels {
+class MovieDbModels {
   final bool adult;
   final String backdropPath;
   final List<int> genreIds;
@@ -14,7 +14,7 @@ class MovieModels {
   final double voteAverage;
   final int voteCount;
 
-  MovieModels({
+  MovieDbModels({
     required this.adult,
     required this.backdropPath,
     required this.genreIds,
@@ -31,16 +31,16 @@ class MovieModels {
     required this.voteCount,
   });
 
-  factory MovieModels.fromJson(Map<String, dynamic> json) => MovieModels(
-        adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+  factory MovieDbModels.fromJson(Map<String, dynamic> json) => MovieDbModels(
+        adult: json["adult"] ?? false,
+        backdropPath: json["backdrop_path"] ?? '',
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
         originalLanguage: json["original_language"]!,
         originalTitle: json["original_title"],
-        overview: json["overview"],
+        overview: json["overview"] ?? '',
         popularity: json["popularity"]?.toDouble(),
-        posterPath: json["poster_path"],
+        posterPath: json["poster_path"] ?? '',
         releaseDate: DateTime.parse(json["release_date"]),
         title: json["title"],
         video: json["video"],

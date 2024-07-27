@@ -1,30 +1,39 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:tmdb_app_dio/infraestructure/datasource/tmdb_api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeView extends StatefulWidget {
+import 'package:tmdb_app_dio/presentation/providers/movies/movies_providers.dart';
+import 'package:tmdb_app_dio/presentation/widgets/widgets.dart';
+
+class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  HomeViewState createState() => HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class HomeViewState extends ConsumerState<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+
+    ref.read(nowPlaygiMovieProvider.notifier).loadNextPage();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final nowPlayingMovies = ref.watch(nowPlaygiMovieProvider);
+
     return Scaffold(
-      body: Center(
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-                onPressed: () {
-                  TmdbApi().getMovies();
-                },
-                child: const Text('Traer Data')),
-            Text(dotenv.env['TMDBKEY'] ?? ''),
+            const SizedBox(height: 25),
+            //AppBarrDinamic
+            const CustomAppbar(),
+
+            //Slider
+            MoviesSliderShow(movies: nowPlayingMovies)
           ],
         ),
       ),

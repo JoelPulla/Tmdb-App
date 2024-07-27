@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:tmdb_app_dio/config/menu/items/items_settings.dart';
-import 'package:tmdb_app_dio/presentation/providers/theme_provider.dart';
+import 'package:tmdb_app_dio/config/providers/theme_provider.dart';
 
 class ConfigScreen extends ConsumerWidget {
   const ConfigScreen({super.key});

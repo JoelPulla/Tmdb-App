@@ -1,32 +1,32 @@
-import 'package:tmdb_app_dio/infraestructure/models/movies.dart';
+import 'package:tmdb_app_dio/infraestructure/models/moviedb_models.dart';
 
-class MovieDataResponse {
-  final Dates dates;
+class MovieDbResponse {
+  final Dates? dates;
   final int page;
-  final List<MovieModels> results;
+  final List<MovieDbModels> results;
   final int totalPages;
   final int totalResults;
 
-  MovieDataResponse({
-    required this.dates,
+  MovieDbResponse({
+    this.dates,
     required this.page,
     required this.results,
     required this.totalPages,
     required this.totalResults,
   });
 
-  factory MovieDataResponse.fromJson(Map<String, dynamic> json) =>
-      MovieDataResponse(
-        dates: Dates.fromJson(json["dates"]),
+  factory MovieDbResponse.fromJson(Map<String, dynamic> json) =>
+      MovieDbResponse(
+        dates: json["dates"] != null ? Dates.fromJson(json["dates"]) : null,
         page: json["page"],
-        results: List<MovieModels>.from(
-            json["results"].map((x) => MovieModels.fromJson(x))),
+        results: List<MovieDbModels>.from(
+            json["results"].map((x) => MovieDbModels.fromJson(x))),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
       );
 
   Map<String, dynamic> toJson() => {
-        "dates": dates.toJson(),
+        "dates": dates?.toJson(),
         "page": page,
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
         "total_pages": totalPages,
