@@ -19,7 +19,9 @@ class MoviesSliderShow extends StatelessWidget {
         pagination: SwiperPagination(
           margin: const EdgeInsets.only(top: 0),
           builder: DotSwiperPaginationBuilder(
-              activeColor: colorTheme.primary, color: colorTheme.secondary),
+            activeColor: colorTheme.primary,
+            color: colorTheme.secondary,
+          ),
         ),
         viewportFraction: 0.8,
         scale: 0.9,
@@ -40,8 +42,9 @@ class _Slide extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
       child: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black45, blurRadius: 10, offset: Offset(0, 10))
             ],

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tmdb_app_dio/presentation/providers/providers.dart';
 
-import 'package:tmdb_app_dio/presentation/providers/movies/movies_providers.dart';
 import 'package:tmdb_app_dio/presentation/widgets/widgets.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -23,18 +23,28 @@ class HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlaygiMovieProvider);
+    final slideShowMovies = ref.watch(moviesSliderShowProvider);
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 25),
-            //AppBarrDinamic
-            const CustomAppbar(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 25),
+              //AppBarrDinamic
+              const CustomAppbar(),
 
-            //Slider
-            MoviesSliderShow(movies: nowPlayingMovies)
-          ],
+              //Slider
+              MoviesSliderShow(movies: slideShowMovies),
+
+              //GetNowPlayingMovies
+              MovieHorizontalListview(
+                movie: nowPlayingMovies,
+                subtitle: 'Friday 20',
+                title: 'New Movies In Cines',
+              )
+            ],
+          ),
         ),
       ),
     );
