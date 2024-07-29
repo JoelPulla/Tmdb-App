@@ -30,8 +30,8 @@ class HomeViewState extends ConsumerState<HomeView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 25),
               //AppBarrDinamic
+              const SizedBox(height: 25),
               const CustomAppbar(),
 
               //Slider
@@ -42,6 +42,7 @@ class HomeViewState extends ConsumerState<HomeView> {
                 movie: nowPlayingMovies,
                 subtitle: 'Friday 20',
                 title: 'New Movies In Cines',
+                loadNextPage: ()=> ref.read(nowPlaygiMovieProvider.notifier).loadNextPage(),
               )
             ],
           ),

@@ -1,8 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:tmdb_app_dio/config/helpers/human_formats.dart';
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
 
-class MovieHorizontalListview extends StatelessWidget {
+class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movie;
   final String? title;
   final String? subtitle;
@@ -17,23 +18,53 @@ class MovieHorizontalListview extends StatelessWidget {
   });
 
   @override
+  State<MovieHorizontalListview> createState() =>
+      _MovieHorizontalListviewState();
+}
+
+class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+
+      //Funtion infinite scroll
+      if ((scrollController.position.pixels + 200) >=
+          scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
       child: Column(
         children: [
           //title
-          if (title != null || subtitle != null)
-            _Title(title: title, subtitle: subtitle),
+          if (widget.title != null || widget.subtitle != null)
+            _Title(title: widget.title, subtitle: widget.subtitle),
 
           //ListView
           Expanded(
             child: ListView.builder(
+              controller: scrollController,
               scrollDirection: Axis.horizontal,
-              itemCount: movie.length,
+              itemCount: widget.movie.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (contex, index) {
-                return _Slide(movie: movie[index]);
+                return _Slide(movie: widget.movie[index]);
               },
             ),
           )
@@ -98,7 +129,9 @@ class _Slide extends StatelessWidget {
                 '${movie.voteAverage}',
                 style: themeText.bodyMedium?.copyWith(color: Colors.amber),
               ),
-              Text(movie.popularity.toString(), style: themeText.bodyMedium)
+              const SizedBox(width: 20),
+              Text(HumanFormats.numberFormat(movie.popularity),
+                  style: themeText.bodyMedium)
             ],
           )
         ],
