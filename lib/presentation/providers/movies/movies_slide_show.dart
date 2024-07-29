@@ -5,7 +5,7 @@ import 'package:tmdb_app_dio/domain/entities/movie.dart';
 
 //Este provider me retorna un lista recordata de mi getnowplayingprovider
 final moviesSliderShowProvider = Provider<List<Movie>>((ref) {
-  final nowPlayingMovies = ref.watch(nowPlaygiMovieProvider);
+  final nowPlayingMovies = ref.watch(nowPlaygiMoviesProvider);
 
   if (nowPlayingMovies.isEmpty) return [];
 

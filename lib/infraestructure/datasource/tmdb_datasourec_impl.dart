@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+
 import 'package:tmdb_app_dio/config/constants/constants.dart';
 import 'package:tmdb_app_dio/domain/datasource/movies_datasource.dart';
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
@@ -15,19 +16,50 @@ final Dio dio = Dio(
   ),
 );
 
+List<Movie> _jsonTomovie(Map<String, dynamic> json) {
+  final movieDBRespose = MovieDbResponse.fromJson(json);
+
+  final List<Movie> movies = movieDBRespose.results
+      .where((moviedb) => moviedb.posterPath != 'no-poster')
+      .map((moviedb) => MovieMapers.movieDBToEnty(moviedb))
+      .toList();
+
+  return movies;
+}
+
 class MoviedbDataSourceApi extends MoviesDatasource {
+  //* NowPlaying
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     final response =
         await dio.get('/movie/now_playing', queryParameters: {'page': page});
 
-    final movieDBRespose = MovieDbResponse.fromJson(response.data);
+    return _jsonTomovie(response.data);
+  }
 
-    final List<Movie> movies = movieDBRespose.results
-        .where((moviedb) => moviedb.posterPath != 'no-poster')
-        .map((moviedb) => MovieMapers.movieDBToEnty(moviedb))
-        .toList();
+  //*Popular
+  @override
+  Future<List<Movie>> getPopular({int page = 1}) async {
+    final response = await dio.get('/movie/popular', queryParameters: {
+      'page': page,
+    });
 
-    return movies;
+    return _jsonTomovie(response.data);
+  }
+
+  //*Up Coming
+  @override
+  Future<List<Movie>> getUpCpming({int page = 1}) async {
+    final response = await dio.get('/movie/upcoming');
+
+    return _jsonTomovie(response.data);
+  }
+
+  @override
+  Future<List<Movie>> getTopRated({int page = 1}) async {
+    final response =
+        await dio.get('/movie/top_rated', queryParameters: {'page': page});
+
+    return _jsonTomovie(response.data);
   }
 }

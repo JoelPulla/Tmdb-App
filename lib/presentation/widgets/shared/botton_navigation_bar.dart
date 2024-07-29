@@ -16,11 +16,9 @@ class _AppButtonNavigatorBarState extends State<AppButtonNavigatorBar> {
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      body: SafeArea(
-        child: IndexedStack(
-          index: selectedIndex,
-          children: screens,
-        ),
+      body: IndexedStack(
+        index: selectedIndex,
+        children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
