@@ -6,6 +6,8 @@ import 'package:tmdb_app_dio/presentation/providers/providers.dart';
 import 'package:tmdb_app_dio/presentation/widgets/widgets.dart';
 
 class HomeView extends ConsumerStatefulWidget {
+  static const String name = 'home_view';
+  
   const HomeView({super.key});
 
   @override
@@ -26,7 +28,7 @@ class HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     final initialLouding = ref.watch(initialLouderProvider);
-
+    //* loading
     if (initialLouding) return const FullScreenLoading();
 
     final nowPlayingMovies = ref.watch(nowPlaygiMoviesProvider);

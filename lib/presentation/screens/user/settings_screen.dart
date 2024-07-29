@@ -5,6 +5,8 @@ import 'package:tmdb_app_dio/config/menu/items/items_settings.dart';
 import 'package:tmdb_app_dio/config/providers/theme_provider.dart';
 
 class ConfigScreen extends ConsumerWidget {
+  static const String name = 'config_screen';
+
   const ConfigScreen({super.key});
 
   @override

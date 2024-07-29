@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:tmdb_app_dio/config/providers/theme_provider.dart';
-import 'package:tmdb_app_dio/presentation/screens/screens.dart';
+import 'package:tmdb_app_dio/config/router/router_app.dart';
 import 'package:tmdb_app_dio/config/theme/theme_app.dart';
 
 Future main() async {
@@ -24,11 +24,11 @@ class MyApp extends ConsumerWidget {
     final isDark = ref.watch(isDarkModeProvider);
     final int colors = ref.watch(selectedColorProvider);
 
-    return MaterialApp(
+    return MaterialApp.router(
       theme: ThemeApp(selectedColor: colors, isDarkMode: isDark).getTheme(),
       debugShowCheckedModeBanner: false,
       title: 'TMDB APP',
-      home: const HomePage(),
+      routerConfig: appRouter,
     );
   }
 }
