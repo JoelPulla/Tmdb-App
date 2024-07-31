@@ -8,7 +8,10 @@ class UiGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColors = Theme.of(context).colorScheme;
+    final size = MediaQuery.of(context).size;
     return Container(
+      height: size.height * 0.61,
+      width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: data,
@@ -30,8 +33,11 @@ class UiGradientTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final themeColors = Theme.of(context).colorScheme;
     return Container(
+      height: size.height * 0.6,
+      width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: data,

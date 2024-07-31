@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
 import 'package:tmdb_app_dio/presentation/providers/movies/movie_detail.provider.dart';
 import 'package:tmdb_app_dio/presentation/widgets/widgets.dart';
@@ -21,7 +22,6 @@ class MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
   @override
   void initState() {
     super.initState();
-
     ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
   }
 
@@ -34,55 +34,52 @@ class MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
     }
 
     return Scaffold(
-      body: Sinv(
-
-
-        
-        physics: const ClampingScrollPhysics(),
-        slivers: [
-          //* AppBar
-          _AppBarImage(movie: movie),
-
-          //
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 5,
-                      children: [
-                        ...movie.genreIds.map(
-                          (gender) => Container(
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(24, 151, 144, 127),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 3),
-                              child: Text(
-                                gender,
-                                style: themeText.bodySmall,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 300,
-                      width: 20,
-                    ),
-                    ],
-                );
-              },
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            //* ImageAppBar
+            _AppBarImage(
+              movie: movie,
             ),
-          )
-        ],
+
+            //* Category
+            const SizedBox(height: 20),
+
+            //*
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 5,
+              children: [
+                ...movie.genreIds.map(
+                  (gender) => Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(24, 151, 144, 127),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      child: Text(
+                        gender,
+                        style: themeText.bodySmall,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+
+            //*
+            const SizedBox(height: 20),
+
+            Container(
+              height: 250,
+              width: 300,
+              color: Colors.amber,
+            ),
+            const SizedBox(height: 600),
+          ],
+        ),
       ),
     );
   }
@@ -99,78 +96,81 @@ class _AppBarImage extends StatelessWidget {
     final themeText = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
-    return SliverAppBar(
-      expandedHeight: size.height * 0.6,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          children: [
-            //* Image
-            SizedBox.expand(
-              child: Image.network(
-                movie.backdropPath,
-                fit: BoxFit.cover,
+    return Stack(
+      children: [
+        //* Image
+        SizedBox(
+          height: size.height * 0.6,
+          child: Image.network(
+            movie.backdropPath,
+            fit: BoxFit.cover,
+          ),
+        ),
+
+        //* Gradient
+        const UiGradient(data: Alignment.bottomRight),
+        const UiGradientTop(data: Alignment.topRight),
+
+        //* Image and Description
+        Positioned(
+          left: 25,
+          bottom: 10,
+          child: Row(
+            children: [
+              SizedBox(
+                height: 150,
+                width: 100,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network(
+                    movie.posterPath,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
-
-            //* Gradient
-            const UiGradient(data: Alignment.bottomRight),
-            const UiGradientTop(data: Alignment.topRight),
-
-            //* Image and Description
-            Positioned(
-              left: 25,
-              bottom: 10,
-              child: Row(
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 150,
-                    width: 100,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        movie.posterPath,
-                        fit: BoxFit.cover,
-                      ),
+                  Text(
+                    movie.title,
+                    style: themeText.titleMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 5),
+                    width: 200,
+                    child: Text(
+                      movie.overview,
+                      style: themeText.bodySmall,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: 10),
+                  Row(
                     children: [
-                      Text(
-                        movie.title,
-                        style: themeText.titleMedium,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      const Icon(
+                        Icons.star_half_outlined,
+                        color: Colors.amber,
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(top: 5),
-                        width: 200,
-                        child: Text(
-                          movie.overview,
-                          style: themeText.bodySmall,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.star_half_outlined,
-                            color: Colors.amber,
-                          ),
-                          Text(movie.popularity.toString())
-                        ],
-                      ),
+                      Text(movie.popularity.toString())
                     ],
-                  )
+                  ),
                 ],
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-      ),
+        Positioned(
+            top: 20,
+            child: IconButton(
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(Icons.arrow_back_ios_rounded)))
+      ],
     );
   }
 }
