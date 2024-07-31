@@ -1,4 +1,4 @@
-import 'package:tmdb_app_dio/infraestructure/models/moviedb_models.dart';
+import 'package:tmdb_app_dio/infraestructure/models/moviedb/moviedb_model.dart';
 
 class MovieDbResponse {
   final Dates? dates;

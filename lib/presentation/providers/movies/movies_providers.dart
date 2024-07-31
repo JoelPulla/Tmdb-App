@@ -24,6 +24,20 @@ final topRatedProvider = StateNotifierProvider<MoviesNotfier, List<Movie>>((ref)
   return MoviesNotfier(fetchMoreMovies: fetchMoreMovies);
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //*
 typedef MovieCallBack = Future<List<Movie>> Function({int page});
 class MoviesNotfier extends StateNotifier<List<Movie>> {

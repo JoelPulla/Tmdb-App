@@ -29,6 +29,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'TMDB APP',
       routerConfig: appRouter,
+      
     );
   }
 }

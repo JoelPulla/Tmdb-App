@@ -7,7 +7,7 @@ import 'package:tmdb_app_dio/presentation/widgets/widgets.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   static const String name = 'home_view';
-  
+
   const HomeView({super.key});
 
   @override
