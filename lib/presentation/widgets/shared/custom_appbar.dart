@@ -9,17 +9,21 @@ class CustomAppbar extends StatelessWidget {
     final themeText = Theme.of(context).textTheme;
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.only(
+          left: 10,
+          top: 20,
+          right: 10,
+        ),
         child: SizedBox(
           width: double.infinity,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(Icons.movie_filter_outlined, color: themeColor.primary),
               const SizedBox(width: 5),
               Text('Movies App', style: themeText.titleMedium),
               const Spacer(),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             ],
           ),
         ),

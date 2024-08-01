@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
-import 'package:tmdb_app_dio/presentation/providers/movies/movie_detail.provider.dart';
+import 'package:tmdb_app_dio/presentation/providers/providers.dart';
 import 'package:tmdb_app_dio/presentation/widgets/widgets.dart';
 
 class MovieDetailScreen extends ConsumerStatefulWidget {
@@ -23,6 +25,7 @@ class MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
   void initState() {
     super.initState();
     ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(actorsByMovieProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
@@ -37,15 +40,11 @@ class MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            //* ImageAppBar
             _AppBarImage(
               movie: movie,
             ),
-
-            //* Category
             const SizedBox(height: 20),
 
-            //*
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 5,
@@ -68,10 +67,10 @@ class MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                 )
               ],
             ),
-
-            //*
             const SizedBox(height: 20),
 
+            //* Actors *//
+            _ActorsByMovie(movieId: movie.id.toString()),
             Container(
               height: 250,
               width: 300,
@@ -171,6 +170,60 @@ class _AppBarImage extends StatelessWidget {
                 },
                 icon: const Icon(Icons.arrow_back_ios_rounded)))
       ],
+    );
+  }
+}
+
+class _ActorsByMovie extends ConsumerWidget {
+  final String movieId;
+  const _ActorsByMovie({required this.movieId});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final themeText = Theme.of(context).textTheme;
+
+    final actorsByMovie = ref.watch(actorsByMovieProvider);
+
+    if (actorsByMovie[movieId] == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final actors = actorsByMovie[movieId]!;
+
+    return SizedBox(
+      height: 300,
+      child: ListView.builder(
+        itemCount: actors.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final actor = actors[index];
+          return Container(
+            padding: const EdgeInsets.only(left: 5),
+            width: 110,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(actor.profilePath),
+                ),
+                Text(
+                  actor.name,
+                  style: themeText.bodyMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  actor.character ?? '',
+                  style: themeText.labelSmall!.copyWith(
+                      color: const Color.fromARGB(255, 106, 106, 106)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
