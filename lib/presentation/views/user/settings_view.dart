@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tmdb_app_dio/config/menu/items/items_settings.dart';
 import 'package:tmdb_app_dio/config/providers/theme_provider.dart';
 
-class ConfigScreen extends ConsumerWidget {
+class SettingsView extends ConsumerWidget {
   static const String name = 'config_screen';
 
-  const ConfigScreen({super.key});
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

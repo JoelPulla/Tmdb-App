@@ -1,50 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:tmdb_app_dio/presentation/screens/screens.dart';
+import 'package:go_router/go_router.dart';
 
-class AppButtonNavigatorBar extends StatefulWidget {
-  const AppButtonNavigatorBar({super.key});
+class AppButtonNavigatorBar extends StatelessWidget {
+  final int currentIndex;
 
-  @override
-  State<AppButtonNavigatorBar> createState() => _AppButtonNavigatorBarState();
-}
+  const AppButtonNavigatorBar({
+    super.key,
+    required this.currentIndex,
+  });
 
-class _AppButtonNavigatorBarState extends State<AppButtonNavigatorBar> {
-  int selectedIndex = 0;
+  void onItemTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/home/0');
+        break;
+      case 1:
+        context.go('/home/1');
+        break;
+      case 2:
+        context.go('/home/2');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      body: IndexedStack(
-        index: selectedIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        currentIndex: selectedIndex,
-        selectedItemColor: colors.primary,
-        onTap: (value) {
-          setState(() {
-            selectedIndex = value;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_max),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_suggest_outlined),
-            label: 'Settings',
-          ),
-        ],
-      ),
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      elevation: 0,
+      selectedItemColor: colors.primary,
+      onTap: (value) => onItemTapped(context, value),
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_max),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.live_tv_rounded),
+          label: 'Tv',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings_suggest_outlined),
+          label: 'Settings',
+        ),
+      ],
     );
   }
-
-  final screens = [
-    const HomeView(),
-    const ConfigScreen(),
-  ];
 }

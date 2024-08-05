@@ -17,8 +17,7 @@ class CustomAppbar extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.only(
           left: 10,
-          top: 20,
-          right: 10,
+          
         ),
         child: SizedBox(
           width: double.infinity,
