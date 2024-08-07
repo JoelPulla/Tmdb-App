@@ -10,7 +10,6 @@ final GoRouter appRouter = GoRouter(
       name: HomeScreen.name,
       builder: (context, state) {
         final pageIndex = int.parse(state.pathParameters['page'] ?? '0');
-
         return HomeScreen(pageIndex: pageIndex);
       },
       routes: [
@@ -24,16 +23,22 @@ final GoRouter appRouter = GoRouter(
             return MovieDetailScreen(movieId: movieId);
           },
         ),
+        GoRoute(
+          path: 'Tv',
+          name: ChanelsView.name,
+          builder: (context, state) => const ChanelsView(),
+        ),
+
+        GoRoute(
+          path: 'Favorites',
+          name: FavoritesView.name,
+          builder: (context, satete) => const FavoritesView(),
+        ),
 
         GoRoute(
           path: 'config',
           name: SettingsView.name,
           builder: (context, satete) => const SettingsView(),
-        ),
-        GoRoute(
-          path: 'Favorites',
-          name: FavoritesView.name,
-          builder: (context, satete) => const FavoritesView(),
         ),
       ],
     ),
