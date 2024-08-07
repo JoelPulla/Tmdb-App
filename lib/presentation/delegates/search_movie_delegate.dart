@@ -140,6 +140,8 @@ class _MovieItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: GestureDetector(
         onTap: () {
+
+          
           onMovieSelected(context, movie);
         },
         child: Row(

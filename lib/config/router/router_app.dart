@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_app_dio/presentation/screens/screens.dart';
-import 'package:tmdb_app_dio/presentation/views/user/settings_view.dart';
 import 'package:tmdb_app_dio/presentation/views/views.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -30,6 +29,11 @@ final GoRouter appRouter = GoRouter(
           path: 'config',
           name: SettingsView.name,
           builder: (context, satete) => const SettingsView(),
+        ),
+        GoRoute(
+          path: 'Favorites',
+          name: FavoritesView.name,
+          builder: (context, satete) => const FavoritesView(),
         ),
       ],
     ),

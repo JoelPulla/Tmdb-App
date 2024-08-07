@@ -20,6 +20,9 @@ class AppButtonNavigatorBar extends StatelessWidget {
       case 2:
         context.go('/home/2');
         break;
+      case 3:
+        context.go('/home/3');
+        break;
     }
   }
 
@@ -31,6 +34,7 @@ class AppButtonNavigatorBar extends StatelessWidget {
       currentIndex: currentIndex,
       elevation: 0,
       selectedItemColor: colors.primary,
+      unselectedItemColor: colors.secondary,
       onTap: (value) => onItemTapped(context, value),
       items: const [
         BottomNavigationBarItem(
@@ -40,6 +44,10 @@ class AppButtonNavigatorBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.live_tv_rounded),
           label: 'Tv',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite_border_sharp),
+          label: 'Favarites',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings_suggest_outlined),

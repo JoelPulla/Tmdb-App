@@ -17,7 +17,6 @@ class CustomAppbar extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.only(
           left: 10,
-          
         ),
         child: SizedBox(
           width: double.infinity,
@@ -44,7 +43,7 @@ class CustomAppbar extends ConsumerWidget {
                   ).then(
                     (movie) {
                       if (movie == null) return;
-                      context.push('/movie/${movie.id}');
+                      context.push('/home/0/movie/${movie.id}');
                     },
                   );
                 },

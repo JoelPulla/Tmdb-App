@@ -10,15 +10,13 @@ final colorList = <Color>[
 
 class ThemeApp {
   final int selectedColor;
-  final bool isDarkMode;
 
   ThemeApp({
     this.selectedColor = 0,
-    this.isDarkMode = false,
   });
 
   ThemeData getTheme() => ThemeData(
-        brightness: isDarkMode ? Brightness.dark : Brightness.light,
+        brightness: Brightness.dark,
         colorSchemeSeed: colorList[selectedColor],
       );
 }

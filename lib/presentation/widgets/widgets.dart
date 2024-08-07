@@ -1,6 +1,9 @@
-export 'package:tmdb_app_dio/presentation/widgets/shared/ui_gradient.dart';
-export 'package:tmdb_app_dio/presentation/widgets/movies/full_screen_loading.dart';
-export 'package:tmdb_app_dio/presentation/widgets/movies/movie_horizontal_listview.dart';
-export 'package:tmdb_app_dio/presentation/widgets/movies/movies_slider_show.dart';
-export 'package:tmdb_app_dio/presentation/widgets/shared/botton_navigation_bar.dart';
-export 'package:tmdb_app_dio/presentation/widgets/shared/custom_appbar.dart';
+export 'shared/ui_gradient.dart';
+export 'movies/full_screen_loading.dart';
+export 'movies/movie_horizontal_listview.dart';
+export 'movies/movies_slider_show.dart';
+export 'shared/botton_navigation_bar.dart';
+export 'shared/custom_appbar.dart';
+export 'movies/movie_poster_link.dart';
+export 'movies/movie_masonry.dart';
+export 'error/is_emty_data.dart';

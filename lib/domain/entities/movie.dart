@@ -1,4 +1,17 @@
+import 'package:isar/isar.dart';
+
+//* archivo que se genera automaticamente
+
+part 'movie.g.dart';
+
+//* decorador para la base de datos local
+@collection
+
+//* Continuacion normal
 class Movie {
+//* identificador de isart
+  Id? isartid;
+
   final bool adult;
   final String backdropPath;
   final List<String> genreIds;

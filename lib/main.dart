@@ -21,15 +21,14 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final isDark = ref.watch(isDarkModeProvider);
+    //final isDark = ref.watch(isDarkModeProvider);
     final int colors = ref.watch(selectedColorProvider);
 
     return MaterialApp.router(
-      theme: ThemeApp(selectedColor: colors, isDarkMode: isDark).getTheme(),
+      theme: ThemeApp(selectedColor: colors).getTheme(),
       debugShowCheckedModeBanner: false,
       title: 'TMDB APP',
       routerConfig: appRouter,
-      
     );
   }
 }

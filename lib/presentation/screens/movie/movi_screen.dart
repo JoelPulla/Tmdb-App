@@ -84,14 +84,25 @@ class MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
   }
 }
 
-class _AppBarImage extends StatelessWidget {
+//* Porvider
+final isFavoriteProvider =
+    FutureProvider.family.autoDispose((ref, int movieId) {
+  final localStorageRepository = ref.watch(localStorageRepositoryprovider);
+  return localStorageRepository.isMovieFavorite(movieId);
+});
+
+// End Provider
+
+class _AppBarImage extends ConsumerWidget {
   final Movie movie;
   const _AppBarImage({
     required this.movie,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+
     final themeText = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
@@ -162,13 +173,42 @@ class _AppBarImage extends StatelessWidget {
             ],
           ),
         ),
+
+        //* Actions
         Positioned(
-            top: 20,
-            child: IconButton(
+          top: 20,
+          child: Row(
+            children: [
+              IconButton(
                 onPressed: () {
                   context.pop();
                 },
-                icon: const Icon(Icons.arrow_back_ios_rounded)))
+                icon: const Icon(Icons.arrow_back_ios_rounded),
+              ),
+              IconButton(
+                onPressed: () async {
+                  // ref
+                  //     .read(localStorageRepositoryprovider)
+                  //     .toggleFavorites(movie);
+                  await ref
+                      .read(favoritesMoviesProvider.notifier)
+                      .toggleFavorites(movie);
+
+                  ref.invalidate(isFavoriteProvider(movie.id));
+                },
+                icon: isFavoriteFuture.when(
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  data: (isFavorite) => isFavorite
+                      ? const Icon(Icons.favorite_rounded, color: Colors.red)
+                      : const Icon(Icons.favorite_border),
+                  error: (_, __) => throw UnimplementedError(),
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -181,13 +221,10 @@ class _ActorsByMovie extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final themeText = Theme.of(context).textTheme;
-
     final actorsByMovie = ref.watch(actorsByMovieProvider);
-
     if (actorsByMovie[movieId] == null) {
       return const Center(child: CircularProgressIndicator());
     }
-
     final actors = actorsByMovie[movieId]!;
 
     return SizedBox(

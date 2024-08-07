@@ -71,7 +71,7 @@ class _ProfileCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final themeApp = Theme.of(context).colorScheme;
-    final isDarkMode = ref.watch(isDarkModeProvider);
+    //final isDarkMode = ref.watch(isDarkModeProvider);
     final textThemeApp = Theme.of(context).textTheme;
     return Card(
       color: themeApp.surfaceContainerLowest,
@@ -100,14 +100,15 @@ class _ProfileCard extends ConsumerWidget {
                   ],
                 ),
                 const Spacer(),
-                IconButton(
-                  icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
-                  onPressed: () {
-                    ref
-                        .read(isDarkModeProvider.notifier)
-                        .update((state) => !state);
-                  },
-                ),
+                // IconButton(
+
+                //   // icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
+                //   // onPressed: () {
+                //   //   ref
+                //   //       .read(isDarkModeProvider.notifier)
+                //   //       .update((state) => !state);
+                //   // },
+                // ),
               ],
             ),
             const Divider(),
