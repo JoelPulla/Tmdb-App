@@ -7,3 +7,5 @@ export 'shared/custom_appbar.dart';
 export 'movies/movie_poster_link.dart';
 export 'movies/movie_masonry.dart';
 export 'error/is_emty_data.dart';
+export 'movies/movies.rating.dart';
+export 'actors/actors_by_movie.dart';
