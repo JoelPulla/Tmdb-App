@@ -41,6 +41,7 @@ class HomeViewState extends ConsumerState<HomeView> {
       slivers: [
         //* AppBar
         const SliverAppBar(
+         
           leadingWidth: 0,
           elevation: 0,
           centerTitle: false,
@@ -48,7 +49,6 @@ class HomeViewState extends ConsumerState<HomeView> {
           flexibleSpace: CustomAppbar(),
         ),
 
-        //* Body
         SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
             return Column(

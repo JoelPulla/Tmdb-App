@@ -19,6 +19,7 @@ class CustomAppbar extends ConsumerWidget {
           left: 10,
         ),
         child: SizedBox(
+          
           width: double.infinity,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
