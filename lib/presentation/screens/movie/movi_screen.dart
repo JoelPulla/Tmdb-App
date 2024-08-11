@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
 import 'package:tmdb_app_dio/presentation/providers/providers.dart';
@@ -37,7 +38,6 @@ class MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
       body: CustomScrollView(
         physics: const ClampingScrollPhysics(),
         slivers: [
-          _CustomAppBar(movie: movie),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               childCount: 1,
@@ -57,21 +57,105 @@ class _MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final textStyles = Theme.of(context).textTheme;
-
+    final themeText = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //* Titulo, OverView y Rating
-        _TitleAndOverview(movie: movie, size: size, textStyles: textStyles),
+        _ImageBackground(movie: movie),
 
-        //* Generos de la película
-        _Genres(movie: movie),
-
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            'Elenco',
+            style: themeText.titleMedium,
+          ),
+        ),
         //* Actores de la película
         ActorsByMovie(movieId: movie.id.toString()),
+
+        //* Video Trailer*//
+        VideosFromMovie(movieId: movie.id),
+
+        const SizedBox(
+          height: 300,
+        )
       ],
+    );
+  }
+}
+
+class _ImageBackground extends ConsumerWidget {
+  final Movie movie;
+  const _ImageBackground({
+    super.key,
+    required this.movie,
+  });
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+    final size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.height * 0.7,
+      child: Stack(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: size.height * 0.6,
+            child: Image.network(
+              movie.posterPath,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.7,
+            child: const UiGradient(
+              data: Alignment.bottomRight,
+            ),
+          ),
+          Positioned(
+            left: 16,
+            bottom: 20,
+            child: _TitleAndOverview(
+              movie: movie,
+              size: size,
+            ),
+          ),
+          const UiGradientTop(data: Alignment.topRight),
+          Positioned(
+            top: 35,
+            left: 1,
+            child: IconButton(
+              onPressed: () {
+                context.pop('/home/0');
+              },
+              icon: const Icon(Icons.arrow_back_ios_new),
+            ),
+          ),
+          Positioned(
+            right: 1,
+            top: 35,
+            child: IconButton(
+              onPressed: () async {
+                await ref
+                    .read(favoritesMoviesProvider.notifier)
+                    .toggleFavorites(movie);
+
+                ref.invalidate(isFavoriteProvider(movie.id));
+              },
+              icon: isFavoriteFuture.when(
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                data: (isFavorite) => isFavorite
+                    ? const Icon(Icons.favorite_rounded, color: Colors.red)
+                    : const Icon(Icons.favorite_border),
+                error: (_, __) => throw UnimplementedError(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -83,130 +167,46 @@ final isFavoriteProvider =
   return localStorageRepository.isMovieFavorite(movieId);
 });
 
-class _CustomAppBar extends ConsumerWidget {
-  final Movie movie;
-  const _CustomAppBar({required this.movie});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
-    final size = MediaQuery.of(context).size;
-    return SliverAppBar(
-      expandedHeight: size.height * 0.7,
-      actions: [
-        IconButton(
-          onPressed: () async {
-            await ref
-                .read(favoritesMoviesProvider.notifier)
-                .toggleFavorites(movie);
-
-            ref.invalidate(isFavoriteProvider(movie.id));
-          },
-          icon: isFavoriteFuture.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            data: (isFavorite) => isFavorite
-                ? const Icon(Icons.favorite_rounded, color: Colors.red)
-                : const Icon(Icons.favorite_border),
-            error: (_, __) => throw UnimplementedError(),
-          ),
-        ),
-      ],
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.only(bottom: 0),
-        background: Stack(
-          children: [
-            SizedBox.expand(
-              child: Image.network(
-                movie.posterPath,
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            //* Favorite Gradient Background
-            const _CustomGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                stops: [
-                  0.0,
-                  0.2
-                ],
-                colors: [
-                  Colors.black54,
-                  Colors.transparent,
-                ]),
-
-            //* Back arrow background
-            const _CustomGradient(
-              begin: Alignment.topLeft,
-              stops: [0.0, 0.3],
-              colors: [
-                Colors.black87,
-                Colors.transparent,
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _TitleAndOverview extends StatelessWidget {
-  const _TitleAndOverview({
-    required this.movie,
-    required this.size,
-    required this.textStyles,
-  });
-
   final Movie movie;
   final Size size;
-  final TextTheme textStyles;
+
+  const _TitleAndOverview({required this.movie, required this.size});
 
   @override
   Widget build(BuildContext context) {
     final themeText = Theme.of(context).textTheme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-      child: Row(
+    return SizedBox(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Imagen
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-              movie.posterPath,
-              width: size.width * 0.3,
+          MovieRating(voteAverage: movie.voteAverage),
+          Text(movie.title,
+              style:
+                  themeText.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+          //* Generos de la película
+          _Genres(movie: movie),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: 600,
+            child: Text(
+              movie.overview,
+              style: themeText.bodyMedium,
+              maxLines: 3,
             ),
           ),
 
-          const SizedBox(width: 10),
+          const SizedBox(height: 10),
 
-          // Description
-          SizedBox(
-            width: (size.width - 40) * 0.7,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(movie.title, style: themeText.titleMedium),
-                Text(
-                  movie.overview,
-                  style: themeText.bodyMedium,
-                  maxLines: 4,
-                ),
-                const SizedBox(height: 10),
-                MovieRating(voteAverage: movie.voteAverage),
-                const Row(
-                  children: [
-                    const Text('Estreno:',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 5),
-                    // Text(HumanFormats.shortDate(movie.releaseDate))
-                  ],
-                )
-              ],
-            ),
-          )
+          // const Row(
+          //   children: [
+          //     Text('Estreno:', style: TextStyle(fontWeight: FontWeight.bold)),
+          //     SizedBox(width: 5),
+          //     // Text('${movie.releaseDate}')
+          //   ],
+          // ),
+          // LinearGradientButton(),
+          //const SizedBox(height: 15)
         ],
       ),
     );
@@ -222,51 +222,28 @@ class _Genres extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: SizedBox(
-        width: double.infinity,
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.center,
-          children: [
-            ...movie.genreIds.map(
-              (gender) => Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Chip(
-                  label: Text(gender),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                ),
+    final colorTheme = Theme.of(context).colorScheme;
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.start,
+      alignment: WrapAlignment.start,
+      children: [
+        ...movie.genreIds.map(
+          (gender) => Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: colorTheme.primary),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            margin: const EdgeInsets.only(right: 10),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                gender,
+                style: TextStyle(fontSize: 8, color: colorTheme.primary),
               ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CustomGradient extends StatelessWidget {
-  final AlignmentGeometry begin;
-  final AlignmentGeometry end;
-  final List<double> stops;
-  final List<Color> colors;
-
-  const _CustomGradient({
-    this.begin = Alignment.centerLeft,
-    this.end = Alignment.centerRight,
-    required this.stops,
-    required this.colors,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: DecoratedBox(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: begin, end: end, stops: stops, colors: colors))),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

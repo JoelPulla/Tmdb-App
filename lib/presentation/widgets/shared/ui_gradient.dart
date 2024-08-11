@@ -12,18 +12,17 @@ class UiGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeColors = Theme.of(context).colorScheme;
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final size = MediaQuery.of(context).size;
     return Container(
       height: size.height * sizeHgrid,
       width: double.infinity,
       decoration: BoxDecoration(
-        
         gradient: LinearGradient(
           begin: data,
           colors: [
-            themeColors.surface,
-            themeColors.surface,
+            scaffoldBackgroundColor,
+            scaffoldBackgroundColor,
             Colors.transparent,
           ],
         ),
@@ -39,8 +38,8 @@ class UiGradientTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final size = MediaQuery.of(context).size;
-    final themeColors = Theme.of(context).colorScheme;
     return Container(
       height: size.height * 0.6,
       width: double.infinity,
@@ -48,7 +47,7 @@ class UiGradientTop extends StatelessWidget {
         gradient: LinearGradient(
           begin: data,
           colors: [
-            themeColors.surface,
+            scaffoldBackgroundColor,
             Colors.transparent,
           ],
         ),

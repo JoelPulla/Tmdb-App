@@ -1,4 +1,5 @@
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
+import 'package:tmdb_app_dio/domain/entities/video.dart';
 
 abstract class MoviesDatasource {
   Future<List<Movie>> getNowPlaying({int page = 1});
@@ -12,4 +13,6 @@ abstract class MoviesDatasource {
   Future<Movie> getMovieById(String id);
 
   Future<List<Movie>> searchMovies(String query);
+
+  Future<List<Video>> getYoutubeVideosById(int movieId);
 }

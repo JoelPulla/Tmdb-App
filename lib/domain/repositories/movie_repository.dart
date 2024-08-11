@@ -1,4 +1,5 @@
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
+import 'package:tmdb_app_dio/domain/entities/video.dart';
 
 // Desde aqui llamamos a nuestro Data Source
 abstract class MoviesRepository {
@@ -13,4 +14,7 @@ abstract class MoviesRepository {
   Future<Movie> getMovieById(String id);
 
   Future<List<Movie>> searchMovies(String query);
+
+  Future<List<Video>> getYoutubeVideosById(int movieId);
+
 }

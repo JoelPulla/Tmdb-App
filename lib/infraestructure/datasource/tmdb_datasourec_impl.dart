@@ -3,9 +3,12 @@ import 'package:dio/dio.dart';
 import 'package:tmdb_app_dio/config/constants/constants.dart';
 import 'package:tmdb_app_dio/domain/datasource/movies_datasource.dart';
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
+import 'package:tmdb_app_dio/domain/entities/video.dart';
 import 'package:tmdb_app_dio/infraestructure/mapers/movie_mapper.dart';
+import 'package:tmdb_app_dio/infraestructure/mapers/video_mapper.dart';
 import 'package:tmdb_app_dio/infraestructure/models/moviedb/movie_detail_response.dart';
 import 'package:tmdb_app_dio/infraestructure/models/moviedb/movie_response.dart';
+import 'package:tmdb_app_dio/infraestructure/models/moviedb/moviedb_videos_youtube.dart';
 
 final Dio dio = Dio(
   BaseOptions(
@@ -83,5 +86,22 @@ class MoviedbDataSourceApi extends MoviesDatasource {
         await dio.get('/search/movie', queryParameters: {'query': query});
 
     return _jsonTomovie(response.data);
+  }
+
+  @override
+  Future<List<Video>> getYoutubeVideosById(int movieId) async {
+    final response = await dio.get('/movie/$movieId/videos');
+
+    final movieDbVideosResponse = VideoResponse.fromJson(response.data);
+
+    final videos = <Video>[];
+
+    for (final movieDbVideo in movieDbVideosResponse.results) {
+      if (movieDbVideo.site == 'YouTube') {
+        final video = VideoMapper.videosById(movieDbVideo);
+        videos.add(video);
+      }
+    }
+    return videos;
   }
 }

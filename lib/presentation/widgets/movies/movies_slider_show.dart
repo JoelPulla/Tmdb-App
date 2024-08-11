@@ -105,6 +105,7 @@ class _DetailsSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeText = Theme.of(context).textTheme;
     return Positioned(
       left: 25,
       bottom: 15,
@@ -128,7 +129,7 @@ class _DetailsSlider extends StatelessWidget {
           ),
           Text(
             movie.title,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            style: themeText.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 5),
           Container(
@@ -145,11 +146,12 @@ class _DetailsSlider extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
               child: Row(
                 children: [
-                  const Icon(Icons.play_arrow_rounded),
+                  const Icon(Icons.play_arrow_rounded, size: 20),
                   const SizedBox(width: 5),
                   Text(
                     'Ver Ahora',
-                    style: themeText.bodyMedium,
+                    style: themeText.bodySmall!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

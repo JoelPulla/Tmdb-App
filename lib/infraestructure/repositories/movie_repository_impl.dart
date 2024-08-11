@@ -1,5 +1,6 @@
 import 'package:tmdb_app_dio/domain/datasource/movies_datasource.dart';
 import 'package:tmdb_app_dio/domain/entities/movie.dart';
+import 'package:tmdb_app_dio/domain/entities/video.dart';
 import 'package:tmdb_app_dio/domain/repositories/movie_repository.dart';
 
 class MovieRepositoryImpl extends MoviesRepository {
@@ -20,20 +21,25 @@ class MovieRepositoryImpl extends MoviesRepository {
   Future<List<Movie>> getUpCpming({int page = 1}) {
     return datasource.getUpCpming(page: page);
   }
-  
+
   @override
   Future<List<Movie>> getTopRated({int page = 1}) {
     return datasource.getTopRated(page: page);
   }
-  
+
   @override
   Future<Movie> getMovieById(String id) {
     return datasource.getMovieById(id);
   }
-  
+
   @override
   Future<List<Movie>> searchMovies(String query) {
-    
     return datasource.searchMovies(query);
+  }
+
+  @override
+  Future<List<Video>> getYoutubeVideosById(int id) {
+    
+    return datasource.getYoutubeVideosById(id);
   }
 }
